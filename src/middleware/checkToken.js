@@ -1,4 +1,5 @@
-const jwt = require('jsonwebtoken');
+import  jwt from 'jsonwebtoken';
+import {response as httpResponse} from "../helpers/http-response";
 
 const checkToken = (req, res, next)=>{
     try {
@@ -18,8 +19,8 @@ const checkToken = (req, res, next)=>{
             });
         }
     } catch (error) {
-        next(error);
+       return httpResponse.error(res, 500, error.message, "token verification failed");
     }
 }
 
-module.exports =  checkToken;
+export default checkToken;
