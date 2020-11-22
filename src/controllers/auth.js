@@ -5,7 +5,20 @@ import db from '../db/index';
 import httpResponse from '../helpers/http-response';
 import validate from '../middleware/auth.validation';
 
+/**
+ * @class Authentication
+ *
+ * @description  Authentication for users
+ */
+
 class Authentication {
+  /**
+    * @static
+    *
+    * @description login for users
+    * @memberOf Authentication
+    */
+
   static async login(req, res) {
     const { username, password } = req.body;
 
@@ -63,6 +76,13 @@ class Authentication {
       return httpResponse.error(res, 500, error.message, 'server error');
     }
   }
+
+  /**
+  * @static
+  *
+  * @description signup for users
+  * @memberOf Authentication
+  */
 
   static async signup(req, res) {
     const {
