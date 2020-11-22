@@ -1,6 +1,7 @@
 import db from "../db/index";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import {response as httpResponse} from "../helpers/http-response";
 
 class Authentication {
 
@@ -51,7 +52,7 @@ class Authentication {
                 code: 403
             })
         } catch (error) {
-            next(error);
+           return httpResponse.error(res, 500, error.message, "Internal server error");
         }
     }
 
@@ -104,7 +105,7 @@ class Authentication {
             })
 
         } catch (error) {
-            next(error);
+            return httpResponse.error(res, 500, error.message, "Internal server error");
         }
     }
 }
