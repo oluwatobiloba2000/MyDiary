@@ -2,7 +2,7 @@ import  migrate from './migration';
 import  db from '../db/index';
 
 
-(async function(){
+(async _ => {
     try {
         await migrate(db)
         console.log('database migrated successfully');
