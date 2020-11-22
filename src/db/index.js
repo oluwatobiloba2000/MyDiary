@@ -1,4 +1,7 @@
+/* eslint-disable no-console */
+/* eslint-disable import/no-mutable-exports */
 import { Pool } from 'pg';
+
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -12,14 +15,13 @@ if (process.env.NODE_ENV === 'development') {
     database: process.env.DATABASE_NAME,
   });
 } else {
-  let connectionString = process.env.DATABASE_URL;
+  const connectionString = process.env.DATABASE_URL;
   pool = new Pool({
-    connectionString
+    connectionString,
   });
 }
 pool.on('connect', () => {
   console.log('DATABASE Connected');
 });
-
 
 export default pool;
