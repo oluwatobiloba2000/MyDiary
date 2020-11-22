@@ -1,5 +1,5 @@
-const createUser = `
-    DROP TABLE IF EXISTS users;
+// DROP TABLE IF EXISTS users;
+const createUserTableQuery = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     CREATE TABLE IF NOT EXISTS
     users(
@@ -12,8 +12,8 @@ const createUser = `
         createdat TIMESTAMP DEFAULT NOW()
     )
 `
-const createDiary = `
-    DROP TABLE IF EXISTS users;
+// DROP TABLE IF EXISTS diary;
+const createDiaryTableQuery = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
     CREATE TABLE IF NOT EXISTS
     diary(
@@ -29,8 +29,8 @@ const createDiary = `
 
 const migrate  = async db => {
     try {
-        await db.query(createUser);
-        await db.query(createDiary);
+        await db.query(createUserTableQuery);
+        await db.query(createDiaryTableQuery);
         return true;
     } catch (error) {
         console.log(error);
