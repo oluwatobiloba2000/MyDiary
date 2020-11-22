@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import db from '../db/index';
 import httpResponse from '../helpers/http-response';
+import validate from '../middleware/auth.validation';
 
 class Authentication {
   static async login(req, res) {
@@ -13,6 +14,15 @@ class Authentication {
         return res.status(400).json({
           message: 'all fields required',
           code: 400,
+        });
+      }
+
+      const validationError = validate.login(username, password);
+      if (validationError.message) {
+        return res.status(400).json({
+          status: 'validation error',
+          code: 400,
+          message: validationError.message,
         });
       }
 
@@ -71,6 +81,15 @@ class Authentication {
         });
       }
 
+      const validationError = validate.signup(username, password, firstname, lastname, email);
+      if (validationError.message) {
+        return res.status(400).json({
+          status: 'validation error',
+          code: 400,
+          message: validationError.message,
+        });
+      }
+
       const userExist = await db.query('SELECT * FROM users WHERE username=$1', [username]);
       if (userExist.rows[0]) {
         return res.status(400).json({
@@ -83,7 +102,7 @@ class Authentication {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      const insertedUser = await db.query('INSERT INTO users (username,firstname, lastname,email, password) VALUES($1, $2) RETURNING *', [username, firstname, lastname, email, hashedPassword]);
+      const insertedUser = await db.query('INSERT INTO users (username,firstname, lastname,email, password) VALUES($1, $2, $3, $4, $5) RETURNING *', [username, firstname, lastname, email, hashedPassword]);
 
       return jwt.sign({
         username: insertedUser.rows[0].username,
